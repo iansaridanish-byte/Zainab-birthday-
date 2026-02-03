@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Everything | 2026</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-deep: #050505;
+            --accent-primary: #ff3366; /* Hot Pink/Red */
+            --accent-secondary: #7000ff; /* Electric Purple */
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor implementation below */
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Custom Cursor --- */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        /* --- Modern Layouts --- */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* --- Landing / Unlock --- */
+        #landing {
+            z-index: 100;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+        }
+
+        .unlock-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1.title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 51, 102, 0.5);
+        }
+
+        /* --- Bento Grid Journey --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 300px);
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .bento-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-item:hover {
+            border-color: var(--accent-primary);
+            transform: scale(1.02);
+        }
+
+        .item-1 { grid-column: span 2; background: linear-gradient(45deg, rgba(112,0,255,0.1), transparent); }
+        .item-2 { grid-column: span 1; }
+        .item-3 { grid-column: span 1; }
+        .item-4 { grid-column: span 1; }
+        .item-5 { grid-column: span 3; background: linear-gradient(-45deg, rgba(255,51,102,0.1), transparent); }
+
+        .bento-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .bento-text { font-size: 1.5rem; font-weight: bold; }
+
+        /* --- Virtual Cake --- */
+        .cake-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background: #4a2c2a;
+            border-radius: 20px;
+            box-shadow: 0 10px 0 #361f1d;
+        }
+
+        .candle {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 60px;
+            background: var(--accent-primary);
+            border-radius: 5px;
+        }
+
+        .flame {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 25px;
+            background: orange;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px orange;
+            animation: flicker 0.1s infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes flicker {
+            from { transform: translateX(-50%) scale(1); }
+            to { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+        }
+
+        /* --- Hidden Content --- */
+        .hidden { opacity: 0; transform: translateY(30px); pointer-events: none; }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            .item-1, .item-5 { grid-column: span 1; }
+            h1.title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+
+    <!-- AUDIO ELEMENT (Add your own source or keep the placeholder) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SECTION 1: LANDING & UNLOCK -->
+    <section class="section" id="landing">
+        <div class="unlock-card" id="starter">
+            <h1 class="title">Wait...</h1>
+            <p style="color: var(--text-dim);">Before we begin, I need to know it's really you.</p>
+            <p style="margin-top: 10px; font-weight: bold;">Are you the most amazing person in the world?</p>
+            <button class="btn-primary" onclick="startJourney()">Yes, I am ❤️</button>
+        </div>
+    </section>
+
+    <!-- SECTION 2: THE STORY (Bento Grid) -->
+    <section class="section hidden" id="journey">
+        <h2 style="font-family: 'Playfair Display'; font-size: 3rem; margin-bottom: 3rem;">365 Days of You</h2>
+        <div class="bento-grid">
+            <div class="bento-item item-1">
+                <span class="bento-tag">The Best Part</span>
+                <p class="bento-text">Waking up knowing you're in my life.</p>
+            </div>
+            <div class="bento-item item-2">
+                <span class="bento-tag">Vibe</span>
+                <p class="bento-text">Unmatched.</p>
+            </div>
+            <div class="bento-item item-3">
+                <span class="bento-tag">Mood</span>
+                <p class="bento-text">Infinite Love.</p>
+            </div>
+            <div class="bento-item item-4">
+                <span class="bento-tag">Stats</span>
+                <p class="bento-text">100% Perfect.</p>
+            </div>
+            <div class="bento-item item-5">
+                <span class="bento-tag">A Promise for 2026</span>
+                <p class="bento-text">To love you more than I did yesterday, every single day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: THE WISH -->
+    <section class="section hidden" id="wish">
+        <div style="text-align: center; max-width: 600px;">
+            <h2 style="font-family: 'Playfair Display'; font-size: 3.5rem; margin-bottom: 2rem;">Make a Wish</h2>
+            
+            <div style="display: flex; justify-content: center; margin: 100px 0;">
+                <div class="cake-container">
+                    <div class="candle">
+                        <div class="flame" id="birthdayFlame" onclick="makeWish()"></div>
+                    </div>
+                </div>
+            </div>
+
+            <p id="wishInstruction" style="color: var(--text-dim); font-style: italic;">(Tap the flame to blow it out)</p>
+        </div>
+    </section>
+
+    <!-- SECTION 4: FINAL MESSAGE -->
+    <section class="section hidden" id="final">
+        <div class="unlock-card" style="max-width: 700px;">
+            <h1 class="title" style="font-size: 3rem;">Happy Birthday!</h1>
+            <p style="font-size: 1.2rem; line-height: 1.8; margin-top: 2rem;">
+                Today isn't just a day on the calendar; it's a celebration of the person who makes my world spin. 
+                In 2026 and beyond, I want to be the reason behind your smile, the person who holds your hand 
+                through every adventure, and the one who loves you most Meelu ki pyari si baby.
+          </p>
+            <p style="margin-top: 2rem; font-weight: bold; color: var(--accent-primary);">Forever & Always, Your Person.</p>
+        </div>
+    </section>
+
+    <script>
+        // --- Cursor Movement ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // --- GSAP Scroll Registration ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        function startJourney() {
+            // Play Audio
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.3;
+            music.play();
+
+            // Transition Landing
+            gsap.to("#starter", { duration: 1, opacity: 0, y: -50, ease: "power4.in" });
+            gsap.to("#landing", { duration: 1.5, delay: 0.5, opacity: 0, display: "none" });
+
+            // Reveal Sections
+            document.querySelectorAll('.hidden').forEach(el => {
+                el.classList.remove('hidden');
+            });
+
+            // Journey Animations
+            gsap.from(".bento-item", {
+                scrollTrigger: {
+                    trigger: "#journey",
+                    start: "top center",
+                },
+                duration: 1,
+                y: 100,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power4.out"
+            });
+
+            // Scroll to next section automatically
+            setTimeout(() => {
+                window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+            }, 1000);
+        }
+
+        function makeWish() {
+            // Blow out flame
+            gsap.to("#birthdayFlame", { 
+                duration: 0.5, 
+                scale: 0, 
+                opacity: 0, 
+                onComplete: () => {
+                    document.getElementById('birthdayFlame').style.display = 'none';
+                    document.getElementById('wishInstruction').innerText = "Wish Granted ✨";
+                    
+                    // Trigger Confetti
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#ff3366', '#7000ff', '#ffffff']
+                    });
+
+                    // Reveal Final Message
+                    setTimeout(() => {
+                        window.scrollTo({ 
+                            top: document.body.scrollHeight, 
+                            behavior: 'smooth' 
+                        });
+                    }, 1500);
+                }
+            });
+        }
+
+        // Add subtle parallax to items
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            gsap.to(".bento-item", { x: x, y: y, duration: 1 });
+        });
+    </script>
+</body>
+</html>
